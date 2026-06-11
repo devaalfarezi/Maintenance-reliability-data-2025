@@ -20,8 +20,20 @@
   --r-md:8px; --r-lg:12px;
   --red:#e24b4a; --blue:#378add; --green:#3b6d11;
 }
+/* dark variables — applied when forced via [data-theme="dark"] */
+:root[data-theme="dark"]{
+  --bg-page:#1c1c1a; --bg-card:#272622; --bg-soft:#323230;
+  --tx-1:#ecebe4; --tx-2:#b0aea6; --tx-3:#87857e;
+  --bd-1:rgba(255,255,255,.12); --bd-2:rgba(255,255,255,.2);
+  --info-bg:rgba(55,138,221,.16); --info-tx:#85b7eb;
+  --danger-bg:rgba(226,75,74,.16); --danger-tx:#f09595;
+  --warn-bg:rgba(239,159,39,.16); --warn-tx:#fac775;
+  --ok-bg:rgba(99,153,34,.18); --ok-tx:#97c459;
+  --red:#e24b4a; --blue:#5ba0e8;
+}
+/* auto: follow device theme only when user hasn't forced light */
 @media (prefers-color-scheme: dark){
-  :root{
+  :root:not([data-theme="light"]){
     --bg-page:#1c1c1a; --bg-card:#272622; --bg-soft:#323230;
     --tx-1:#ecebe4; --tx-2:#b0aea6; --tx-3:#87857e;
     --bd-1:rgba(255,255,255,.12); --bd-2:rgba(255,255,255,.2);
@@ -43,6 +55,11 @@ body{margin:0;background:var(--bg-page);color:var(--tx-1);
 .hdr h1{margin:0;font-size:17px;font-weight:500}
 .hdr p{margin:0;font-size:12px;color:var(--tx-3)}
 .pill{font-size:12px;color:var(--tx-2);border:.5px solid var(--bd-1);border-radius:var(--r-md);padding:5px 10px;white-space:nowrap}
+.themebtn{width:34px;height:34px;display:flex;align-items:center;justify-content:center;
+  border:.5px solid var(--bd-1);border-radius:var(--r-md);background:transparent;color:var(--tx-2);
+  cursor:pointer;flex-shrink:0}
+.themebtn:hover{border-color:var(--bd-2);color:var(--tx-1)}
+.themebtn i{font-size:17px}
 .crumb{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--tx-2);flex-wrap:wrap;margin-bottom:18px}
 .crumb .now{color:var(--tx-1)}
 .tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:4px}
@@ -97,6 +114,7 @@ body{margin:0;background:var(--bg-page);color:var(--tx-1);
       <p>Maintenance &amp; reliability — data 2025</p>
     </div>
     <span class="pill">Periode 2025</span>
+    <button class="themebtn" id="themeBtn" aria-label="Ganti tema terang/gelap"><i class="ti ti-moon"></i></button>
   </div>
 
   <div class="crumb">
@@ -162,6 +180,34 @@ body{margin:0;background:var(--bg-page);color:var(--tx-1);
 </div>
 
 <script>
+/* ---- theme toggle: light / dark / auto (mengikuti perangkat) ---- */
+(function(){
+  var root=document.documentElement, btn=document.getElementById('themeBtn');
+  var mq=window.matchMedia('(prefers-color-scheme: dark)');
+  function effectiveDark(){
+    var t=root.getAttribute('data-theme');
+    if(t==='dark') return true;
+    if(t==='light') return false;
+    return mq.matches;
+  }
+  function paintIcon(){
+    btn.innerHTML = effectiveDark() ? '<i class="ti ti-sun"></i>' : '<i class="ti ti-moon"></i>';
+  }
+  function apply(t){
+    if(t==='light'||t==='dark') root.setAttribute('data-theme',t);
+    else root.removeAttribute('data-theme');
+    paintIcon();
+  }
+  var saved; try{saved=localStorage.getItem('mu-theme');}catch(e){}
+  apply(saved||'auto');
+  if(mq.addEventListener) mq.addEventListener('change', paintIcon);
+  btn.addEventListener('click',function(){
+    var next = effectiveDark() ? 'light' : 'dark';
+    apply(next);
+    try{localStorage.setItem('mu-theme',next);}catch(e){}
+  });
+})();
+
 var D={
  month:[['Jan',2081],['Feb',1506],['Mar',1662],['Apr',3063],['Mei',2816],['Jun',2006],['Jul',2829],['Agu',4130],['Sep',3021],['Okt',2891],['Nov',2045],['Des',1726]],
  mesin:[['Packer 3',3116],['Lift SAP',1879],['Mixer MR 220 / Mixer 1',1493],['Packer 3 Spout 2',1421],['M-tec',1186],['Conveyor Deflection SAP',991],['Lift Palettizer',947],['Scale 2.6 Additive L2',893],['Conveyor Exit SAP',783]],
