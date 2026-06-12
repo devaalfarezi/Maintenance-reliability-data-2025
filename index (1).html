@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Project — Maintenance & Reliability</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.7.0/dist/tabler-icons.min.css">
+<style>
+:root{
+  --bg-page:#faf9f5; --bg-card:#ffffff; --bg-soft:#f1efe8;
+  --tx-1:#2b2b29; --tx-2:#5f5e5a; --tx-3:#8a897f;
+  --bd-1:rgba(0,0,0,.10); --bd-2:rgba(0,0,0,.18);
+  --info-bg:#e6f1fb; --info-tx:#185fa5;
+  --danger-bg:#fcebeb; --danger-tx:#a32d2d;
+  --warn-bg:#faeeda; --warn-tx:#854f0b;
+  --ok-bg:#eaf3de; --ok-tx:#3b6d11;
+  --r-md:8px; --r-lg:12px;
+  --red:#e24b4a; --blue:#378add; --green:#3b6d11;
+}
+:root[data-theme="dark"]{
+  --bg-page:#1c1c1a; --bg-card:#272622; --bg-soft:#323230;
+  --tx-1:#ecebe4; --tx-2:#b0aea6; --tx-3:#87857e;
+  --bd-1:rgba(255,255,255,.12); --bd-2:rgba(255,255,255,.2);
+  --info-bg:rgba(55,138,221,.16); --info-tx:#85b7eb;
+  --danger-bg:rgba(226,75,74,.16); --danger-tx:#f09595;
+  --warn-bg:rgba(239,159,39,.16); --warn-tx:#fac775;
+  --ok-bg:rgba(99,153,34,.18); --ok-tx:#97c459;
+  --red:#e24b4a; --blue:#5ba0e8;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg-page:#1c1c1a; --bg-card:#272622; --bg-soft:#323230;
+    --tx-1:#ecebe4; --tx-2:#b0aea6; --tx-3:#87857e;
+    --bd-1:rgba(255,255,255,.12); --bd-2:rgba(255,255,255,.2);
+    --info-bg:rgba(55,138,221,.16); --info-tx:#85b7eb;
+    --danger-bg:rgba(226,75,74,.16); --danger-tx:#f09595;
+    --warn-bg:rgba(239,159,39,.16); --warn-tx:#fac775;
+    --ok-bg:rgba(99,153,34,.18); --ok-tx:#97c459;
+    --red:#e24b4a; --blue:#5ba0e8;
+  }
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg-page);color:var(--tx-1);
+  font-family:Inter,system-ui,-apple-system,sans-serif;font-size:15px;line-height:1.5;
+  -webkit-font-smoothing:antialiased}
+.wrap{max-width:840px;margin:0 auto;padding:24px 18px 48px}
+.hdr{display:flex;align-items:center;gap:12px;margin-bottom:18px}
+.logo{display:flex;align-items:center;background:#fff;
+  border:.5px solid rgba(0,0,0,.08);border-radius:var(--r-md);
+  padding:8px 14px;flex-shrink:0}
+.logo img{height:45px;width:auto;display:block}
+.hdr h1{margin:0;font-size:17px;font-weight:500}
+.hdr p{margin:0;font-size:12px;color:var(--tx-3)}
+.pill{font-size:12px;color:var(--tx-2);border:.5px solid var(--bd-1);border-radius:var(--r-md);padding:5px 10px;white-space:nowrap}
+.themebtn{width:34px;height:34px;display:flex;align-items:center;justify-content:center;
+  border:.5px solid var(--bd-1);border-radius:var(--r-md);background:transparent;color:var(--tx-2);
+  cursor:pointer;flex-shrink:0}
+.themebtn:hover{border-color:var(--bd-2);color:var(--tx-1)}
+.themebtn i{font-size:17px}
+.crumb{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--tx-2);flex-wrap:wrap;margin-bottom:18px}
+.crumb .now{color:var(--tx-1)}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:4px}
+.tab{padding:8px 14px;border:.5px solid var(--bd-1);background:transparent;border-radius:var(--r-md);
+  font-size:14px;font-family:inherit;cursor:pointer;color:var(--tx-2);display:inline-flex;align-items:center;gap:6px}
+.tab.on{background:var(--bg-soft);color:var(--tx-1);border-color:var(--bd-2)}
+.tab i{font-size:15px}
+.card{background:var(--bg-card);border:.5px solid var(--bd-1);border-radius:var(--r-lg);padding:16px 20px;margin-top:16px}
+.card h2{margin:0;font-size:15px;font-weight:500}
+.sub{margin:2px 0 0;font-size:12px;color:var(--tx-3)}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-top:16px}
+.metric{background:var(--bg-soft);border-radius:var(--r-md);padding:14px 16px}
+.metric .k{margin:0;font-size:13px;color:var(--tx-2)}
+.metric .v{margin:4px 0 0;font-size:24px;font-weight:500}
+.metric .u{font-size:13px;color:var(--tx-2);font-weight:400}
+.cardhd{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px}
+.tgs{display:flex;gap:8px}
+.tg{padding:6px 12px;border:.5px solid var(--bd-1);background:transparent;border-radius:var(--r-md);
+  font-size:13px;font-family:inherit;cursor:pointer;color:var(--tx-2)}
+.tg.on{background:var(--info-bg);color:var(--info-tx);border-color:var(--info-tx)}
+.brow{display:flex;align-items:center;gap:12px;margin:10px 0}
+.blab{width:160px;font-size:13px;color:var(--tx-2);flex-shrink:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.btrk{flex:1;background:var(--bg-soft);border-radius:var(--r-md);height:20px}
+.bfil{height:100%;border-radius:var(--r-md)}
+.bval{width:74px;font-size:13px;text-align:right;flex-shrink:0;font-weight:500}
+.month{display:flex;align-items:flex-end;gap:6px;height:130px;margin-top:8px}
+.mcol{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%}
+.mcol .mv{font-size:11px;color:var(--tx-3)}
+.mcol .mb{width:100%;background:var(--red);border-radius:4px 4px 0 0;margin-top:3px}
+.mcol .ml{font-size:11px;color:var(--tx-2);margin-top:4px}
+.lirow{display:flex;align-items:center;justify-content:space-between;padding:11px 0;border-bottom:.5px solid var(--bd-1);gap:10px}
+.lirow:last-child{border-bottom:none}
+.litxt{min-width:0}
+.litxt .a{font-size:14px;display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.litxt .b{font-size:12px;color:var(--tx-3)}
+.tag{font-size:12px;padding:4px 10px;border-radius:var(--r-md);white-space:nowrap}
+.intv{font-size:11px;padding:2px 8px;border-radius:var(--r-md);background:var(--bg-soft);color:var(--tx-2);white-space:nowrap}
+.riteflex{display:flex;align-items:center;gap:8px;flex-shrink:0}
+.hide{display:none}
+.foot{margin-top:20px;font-size:12px;color:var(--tx-3);text-align:center}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1 class="sr">Dashboard maintenance dan reliability Line Dry Mortar, data 2025</h1>
+
+  <div class="hdr">
+    <div class="logo"><img src="logo-MU-new-hires-01.webp" alt="MU Mortar Utama — Saint-Gobain"></div>
+    <div style="flex:1">
+      <h1>Project </h1>
+      <p>Maintenance &amp; reliability — data 2025</p>
+    </div>
+    <span class="pill">Periode 2025</span>
+    <button class="themebtn" id="themeBtn" aria-label="Ganti tema terang/gelap"><i class="ti ti-moon"></i></button>
+  </div>
+
+  <div class="crumb">
+    <i class="ti ti-stack-2" style="font-size:16px"></i>
+    <span class="now">Line Dry Mortar</span>
+    <i class="ti ti-chevron-right" style="font-size:14px"></i><span>Line 1</span>
+    <i class="ti ti-chevron-right" style="font-size:14px"></i><span>Packer A-B</span>
+  </div>
+
+  <div class="tabs">
+    <button class="tab on" data-p="bd"><i class="ti ti-chart-bar"></i>Breakdown map</button>
+    <button class="tab" data-p="sp"><i class="ti ti-packages"></i>Spare parts usage</button>
+    <button class="tab" data-p="pm"><i class="ti ti-calendar-clock"></i>Preventive maintenance</button>
+  </div>
+
+  <!-- ================= BREAKDOWN ================= -->
+  <div id="panel-bd">
+    <div class="grid">
+      <div class="metric"><p class="k">Total downtime</p><p class="v">29.979 <span class="u">mnt</span></p></div>
+      <div class="metric"><p class="k">Kejadian breakdown</p><p class="v">402 <span class="u">dari 732</span></p></div>
+      <div class="metric"><p class="k">Downtime breakdown</p><p class="v">21.666 <span class="u">mnt</span></p></div>
+      <div class="metric"><p class="k">MTTR rata-rata</p><p class="v">54 <span class="u">mnt</span></p></div>
+    </div>
+    <div class="card">
+      <h2>Tren downtime per bulan</h2>
+      <p class="sub">menit per bulan · total 2025: 29.979 menit</p>
+      <div class="month" id="monthChart"></div>
+    </div>
+    <div class="card">
+      <div class="cardhd">
+        <div><h2>Analisis breakdown</h2><p class="sub">total menit downtime per mesin / kategori</p></div>
+        <div class="tgs"><button class="tg on" data-bd="mesin">By mesin</button><button class="tg" data-bd="kategori">By kategori</button></div>
+      </div>
+      <div id="bdChart" style="margin-top:12px"></div>
+    </div>
+  </div>
+
+  <!-- ================= SPARE PARTS ================= -->
+  <div id="panel-sp" class="hide">
+    <div class="grid" id="spKpi"></div>
+    <div class="card">
+      <div class="cardhd">
+        <div><h2>Pemakaian sparepart</h2><p class="sub">total unit terpakai, 2025</p></div>
+        <div class="tgs"><button class="tg on" data-sp="item">By item</button><button class="tg" data-sp="mesin">By mesin</button></div>
+      </div>
+      <div id="spChart" style="margin-top:12px"></div>
+    </div>
+    <div class="card">
+      <h2>Stok kritis — perlu re-order</h2>
+      <p class="sub">stok on-hand (08 Jun 2026) ÷ rata-rata pemakaian bulanan 2025 = sisa cover (bulan)</p>
+      <div id="stList" style="margin-top:8px"></div>
+    </div>
+  </div>
+
+  <!-- ================= PM ================= -->
+  <div id="panel-pm" class="hide">
+    <div class="grid" id="pmKpi"></div>
+    <div class="card">
+      <div class="cardhd">
+        <div><h2>Jadwal perawatan rutin</h2><p class="sub">12 mesin dgn breakdown terbanyak 2025 · interval dari MTBF, inspeksi lebih rapat agar mendahului kerusakan</p></div>
+        <div class="tgs"><button class="tg on" data-pm="2minggu">2 mingguan</button><button class="tg" data-pm="all">Semua</button></div>
+      </div>
+      <div id="pmList" style="margin-top:8px"></div>
+    </div>
+  </div>
+
+  <p class="foot">Sumber: data downtime, sparepart usage 2025 &amp; stok 08-06-2026 · interval PM diturunkan dari MTBF</p>
+</div>
+
+<script>
+/* ---- theme toggle ---- */
+(function(){
+  var root=document.documentElement, btn=document.getElementById('themeBtn');
+  var mq=window.matchMedia('(prefers-color-scheme: dark)');
+  function effectiveDark(){
+    var t=root.getAttribute('data-theme');
+    if(t==='dark') return true;
+    if(t==='light') return false;
+    return mq.matches;
+  }
+  function paintIcon(){
+    btn.innerHTML = effectiveDark() ? '<i class="ti ti-sun"></i>' : '<i class="ti ti-moon"></i>';
+  }
+  function apply(t){
+    if(t==='light'||t==='dark') root.setAttribute('data-theme',t);
+    else root.removeAttribute('data-theme');
+    paintIcon();
+  }
+  var saved; try{saved=localStorage.getItem('mu-theme');}catch(e){}
+  apply(saved||'auto');
+  if(mq.addEventListener) mq.addEventListener('change', paintIcon);
+  btn.addEventListener('click',function(){
+    var next = effectiveDark() ? 'light' : 'dark';
+    apply(next);
+    try{localStorage.setItem('mu-theme',next);}catch(e){}
+  });
+})();
+
+/* ====== SEMUA DATA DI BAWAH DIHITUNG LANGSUNG DARI 3 FILE EXCEL ======
+   1) data_mesin_hirarki_dan_data_downtime.xlsx  (sheet DATA2025, 732 baris valid)
+   2) Sparepart_Usage_2025_-_Kirim_Dafa.xlsx     (3.973 transaksi)
+   3) stock_sparepart_20260608.xlsx              (1.619 SKU)                    */
+var D={
+ /* downtime per bulan (menit) */
+ month:[['Jan',2081],['Feb',1506],['Mar',1662],['Apr',3063],['Mei',2816],['Jun',2006],['Jul',2829],['Agu',4130],['Sep',3021],['Okt',2891],['Nov',2045],['Des',1726]],
+ /* top-9 mesin by total downtime (menit, semua loss category) */
+ mesin:[['Packer 3',3116],['Lift SAP',1879],['Mixer MR 220 / Mixer 1',1493],['Packer 3 Spout 2',1421],['M-tec',1186],['Conveyor Deflection SAP',991],['Lift Palettizer',947],['Scale 2.6 (Additive Line 2)',893],['Conveyor Exit SAP',783]],
+ /* downtime by kategori BKD (menit) */
+ kategori:[['Mechanical',17545],['Electrical',7406],['Other',3718],['Automation',1240],['Pneumatic',70]],
+ /* top-8 item sparepart by qty terpakai 2025 */
+ spItem:[['Bola Karet Sieving Mesin',2730],['Batu Gerinda 16x100x2 (potong)',483],['Ring Plat Baja HTB 10 mm',468],['Ring Plat Baja HTB 12 mm',439],['Baut Roof Screw 5x20',407],['Filter Bag dia 17cm Nomex',406],['Baut mur 8x25 full drat',354],['Ring Plat Baja HTB 18 mm',300]],
+ /* top-8 mesin by qty sparepart terpakai */
+ spMesin:[['Sieving Mesin',1104],['Tools MTC',1054],['Sieving Mesin B05',501],['TAT',448],['Packer 3',309],['Sieving',274],['STP',269],['Dust Colector Dryer 1',218]],
+ /* stok kritis: [item, on-hand, pakai/2025, cover bulan] */
+ kritis:[
+  ['Baut, 6 x 20 mm',1,202,0.1],
+  ['Thinner @ 5 ltr',6,288,0.2],
+  ['Cat Ftalit Kuning KF 147 @1kg',8,227,0.4],
+  ['Refill Tabung Gas Oxygen 6M3',1,19,0.6],
+  ['Rubber Hose 255mm x ID 55mm',3,38,0.9],
+  ['Fixing Set MR/MS 45 (Mixer)',1,10,1.2],
+  ['Ring Plat Baja HTB 10 mm',52,468,1.3],
+  ['Lem Loctite 454 New 20gr',5,42,1.4]
+ ],
+ /* PM dari MTBF breakdown 2025:
+    [mesin, tugas, interval, MTBF hari, jml BKD, mode kerusakan dominan] */
+ pm:[
+  ['Packer 3','Cek & ganti rubber hose, setting spout','Tiap 2 minggu',10.7,34,'Deflection'],
+  ['Lift SAP','Inspeksi sensor palet & pelumasan lift','Tiap 2 minggu',11.4,32,'Lift SAP macet'],
+  ['Conveyor Deflection SAP','Setting & cek deflection belt','Tiap 2 minggu',19.2,19,'Belt deflection'],
+  ['Left Press','Cek & kalibrasi sensor left press','Tiap 2 minggu',20.3,18,'Sensor left press'],
+  ['Lift Palettizer','Pelumasan rantai & cek inverter','Tiap 2 minggu',21.5,17,'Lift palettizer'],
+  ['M-tec','Cek koneksi profibus & panel kontrol','Tiap 2 minggu',24.3,15,'Profibus'],
+  ['Conveyor Exit SAP','Cek & ganti roller exit','Bulanan',28.1,13,'Roller exit SAP'],
+  ['Mixer MR 220 / Mixer 1','Pelumasan & cek seal/gearbox','Bulanan',30.4,12,'Mixer macet'],
+  ['Scale 2.2 (Material Line 2)','Kalibrasi & cek load cell','Bulanan',30.4,12,'DK full scale 2.2'],
+  ['Conveyor Lift SAP','Cek motor & inverter','Bulanan',33.2,11,'Motor inverter'],
+  ['Hatch Palletizer','Kalibrasi sensor & setting hatch','Bulanan',33.2,11,'Hatch inverter'],
+  ['Pusher 1 Palletizer','Cek mekanis & pelumasan pusher','Bulanan',36.5,10,'Pusher 1 palletizer']
+ ]
+};
+var nf=new Intl.NumberFormat('id-ID');
+function css(v){return getComputedStyle(document.documentElement).getPropertyValue(v).trim();}
+
+function bars(id,rows,color){
+ var max=Math.max.apply(null,rows.map(function(r){return r[1]}));
+ document.getElementById(id).innerHTML=rows.map(function(r){
+  var w=Math.round(r[1]/max*100);
+  return '<div class="brow"><span class="blab" title="'+r[0]+'">'+r[0]+'</span><div class="btrk"><div class="bfil" style="width:'+w+'%;background:'+color+'"></div></div><span class="bval">'+nf.format(r[1])+'</span></div>';
+ }).join('');
+}
+function months(){
+ var max=Math.max.apply(null,D.month.map(function(r){return r[1]}));
+ document.getElementById('monthChart').innerHTML=D.month.map(function(r){
+  var h=Math.round(r[1]/max*96);
+  return '<div class="mcol"><span class="mv">'+nf.format(r[1])+'</span><div class="mb" style="height:'+h+'px"></div><span class="ml">'+r[0]+'</span></div>';
+ }).join('');
+}
+function kpi(id,arr){
+ document.getElementById(id).innerHTML=arr.map(function(k){
+  return '<div class="metric"><p class="k">'+k[0]+'</p><p class="v">'+k[1]+' <span class="u">'+(k[2]||'')+'</span></p></div>';
+ }).join('');
+}
+
+var RED=css('--red'), BLUE=css('--blue');
+months(); bars('bdChart',D.mesin,RED);
+document.querySelectorAll('.tg[data-bd]').forEach(function(b){b.addEventListener('click',function(){
+ document.querySelectorAll('.tg[data-bd]').forEach(function(x){x.classList.remove('on')});b.classList.add('on');
+ bars('bdChart',D[b.dataset.bd],RED);});});
+
+/* ---- Spare parts: KPI gabungan usage + stock ---- */
+kpi('spKpi',[['Qty terpakai 2025','14.519','unit'],['Jenis item terpakai','670','item'],
+ ['SKU di gudang','1.619','sku'],['Stok kritis','10','item']]);
+bars('spChart',D.spItem,BLUE);
+document.querySelectorAll('.tg[data-sp]').forEach(function(b){b.addEventListener('click',function(){
+ document.querySelectorAll('.tg[data-sp]').forEach(function(x){x.classList.remove('on')});b.classList.add('on');
+ bars('spChart',b.dataset.sp==='item'?D.spItem:D.spMesin,BLUE);});});
+
+/* ---- daftar stok kritis ---- */
+document.getElementById('stList').innerHTML=D.kritis.map(function(r){
+ var crit=r[3]<1;
+ var bg=crit?'var(--danger-bg)':'var(--warn-bg)', tc=crit?'var(--danger-tx)':'var(--warn-tx)';
+ var ic=crit?'ti-alert-triangle':'ti-clock';
+ return '<div class="lirow"><span class="litxt"><span class="a">'+r[0]+'</span><span class="b">stok '+r[1]+' · terpakai '+nf.format(r[2])+' unit di 2025</span></span><span class="tag" style="background:'+bg+';color:'+tc+'"><i class="ti '+ic+'" style="font-size:13px;vertical-align:-1px;margin-right:3px"></i>cover '+r[3].toFixed(1)+' bln</span></div>';
+}).join('');
+
+/* ---- PM: KPI & daftar ---- */
+var biweek=D.pm.filter(function(t){return t[2]==='Tiap 2 minggu'}).length;
+var monthly=D.pm.filter(function(t){return t[2]==='Bulanan'}).length;
+var worst=D.pm[0];
+kpi('pmKpi',[['Total terjadwal',String(D.pm.length),'mesin'],['Interval 2 mingguan',String(biweek),'mesin'],
+ ['Interval bulanan',String(monthly),'mesin'],['MTBF terpendek',String(worst[3]),'hari ('+worst[0]+')']]);
+
+function pmRender(mode){
+ var rows=D.pm.slice();
+ if(mode==='2minggu') rows=rows.filter(function(t){return t[2]==='Tiap 2 minggu'});
+ document.getElementById('pmList').innerHTML=rows.map(function(t){
+  var urgent=t[3]<=15;
+  var bg=urgent?'var(--warn-bg)':'var(--bg-soft)', tc=urgent?'var(--warn-tx)':'var(--tx-2)';
+  return '<div class="lirow"><span class="litxt"><span class="a">'+t[1]+'</span><span class="b">'+t[0]+' · mode dominan: '+t[5]+' · '+t[4]+' BKD/2025</span></span><span class="riteflex"><span class="tag" style="background:'+bg+';color:'+tc+'">MTBF '+t[3]+' hr</span><span class="intv">'+t[2]+'</span></span></div>';
+ }).join('');
+}
+pmRender('2minggu');
+document.querySelectorAll('.tg[data-pm]').forEach(function(b){b.addEventListener('click',function(){
+ document.querySelectorAll('.tg[data-pm]').forEach(function(x){x.classList.remove('on')});b.classList.add('on');
+ pmRender(b.dataset.pm);});});
+
+document.querySelectorAll('.tab').forEach(function(b){b.addEventListener('click',function(){
+ document.querySelectorAll('.tab').forEach(function(x){x.classList.remove('on')});b.classList.add('on');
+ ['bd','sp','pm'].forEach(function(p){document.getElementById('panel-'+p).classList.toggle('hide',p!==b.dataset.p)});});});
+</script>
+</body>
+</html>
